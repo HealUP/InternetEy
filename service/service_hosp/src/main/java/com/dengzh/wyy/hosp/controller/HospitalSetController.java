@@ -1,6 +1,8 @@
 package com.dengzh.wyy.hosp.controller;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dengzh.wyy.common.exception.wyyException;
@@ -22,6 +24,7 @@ import java.util.Random;
 @Api(tags = "医院设置管理")
 @RestController
 @RequestMapping("/admin/hosp/hospitalSet")
+@CrossOrigin//允许跨域访问
 public class HospitalSetController {
     //注入service
     @Autowired
@@ -75,7 +78,7 @@ public class HospitalSetController {
             wrapper.like("hosname", hospitalSetQueryVo.getHosname());
         }
         //调用方法实现分页查询
-        Page<HospitalSet> pageHospitalSet = hospitalSetService.page(page, wrapper);
+        IPage<HospitalSet> pageHospitalSet = hospitalSetService.page(page, wrapper);
 
         //返回结果
         return Result.ok(pageHospitalSet);
