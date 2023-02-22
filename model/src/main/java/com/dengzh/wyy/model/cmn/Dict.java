@@ -62,8 +62,9 @@ public class Dict {
     @TableField("dict_code")
     private String dictCode;
 
+    // 根据element-ui的层级关系的表格中要求的字段进行添加的
     @ApiModelProperty(value = "是否包含子节点")
-    @TableField(exist = false)
+    @TableField(exist = false) // 注意这里
     private boolean hasChildren;
 
 }

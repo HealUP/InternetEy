@@ -1,12 +1,12 @@
-package com.dengzh.wyy.model.hosp;
+package com.dengzh.wyy.model.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.dengzh.wyy.model.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.dengzh.wyy.model.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -23,11 +23,12 @@ import lombok.Data;
 @Data
 @ApiModel(description = "医院设置")
 @TableName("hospital_set")
-public class HospitalSet extends BaseEntity {
+public class saveHospitalSet extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
 
 	@ApiModelProperty(value = "id")
+	@TableId(type = IdType.ASSIGN_ID)
 	@JsonProperty("id")
 	//此句为问题关键 相当于吧Long转换为String
 	@JsonFormat(shape = JsonFormat.Shape.STRING)

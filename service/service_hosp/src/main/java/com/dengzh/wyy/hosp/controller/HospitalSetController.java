@@ -1,6 +1,5 @@
 package com.dengzh.wyy.hosp.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -9,6 +8,7 @@ import com.dengzh.wyy.common.exception.wyyException;
 import com.dengzh.wyy.common.result.Result;
 import com.dengzh.wyy.common.utils.MD5;
 import com.dengzh.wyy.hosp.service.HospitalSetService;
+import com.dengzh.wyy.model.dto.updateHospitalSet;
 import com.dengzh.wyy.model.hosp.HospitalSet;
 import com.dengzh.wyy.model.vo.hosp.HospitalSetQueryVo;
 import io.swagger.annotations.Api;
@@ -121,14 +121,14 @@ public class HospitalSetController {
     //6 修改医院设置信息
     @ApiOperation(value = "修改医院设置信息")
     @PostMapping("updateHospitalSet")
-    public Result updateHospitalSet(@ApiParam(name = "hospitalSet", value = "修改对象的信息", required = true)
+    public Result updateHospitalSet(@ApiParam(name = "updatehospitalSet", value = "修改对象的信息", required = true)
                                     @RequestBody HospitalSet hospitalSet) {
+
         boolean flag = hospitalSetService.updateById(hospitalSet);
         if (flag) {
             return Result.ok();
-        } else {
-            return Result.fail();
         }
+        return Result.fail();
     }
 
     //7 批量删除医院设置信息

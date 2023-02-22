@@ -26,7 +26,7 @@ public class Swagger2Config {
                 .groupName("webApi")
                 .apiInfo(webApiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.dengzh.wyy.hosp.controller")) //controller所在的包位置
+                .apis(RequestHandlerSelectors.basePackage("com.dengzh.wyy")) // 所在的包位置
                 //只显示api路径下的页面
                 .paths(Predicates.and(PathSelectors.regex("/api/.*")))
                 .build();
@@ -40,7 +40,7 @@ public class Swagger2Config {
                 .groupName("adminApi")
                 .apiInfo(adminApiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.dengzh.wyy.hosp.controller")) //controller所在的包位置
+                .apis(RequestHandlerSelectors.basePackage("com.dengzh.wyy")) // 所在的包位置
                 //只显示admin路径下的页面
                 .paths(Predicates.and(PathSelectors.regex("/admin/.*")))
 //                .paths(PathSelectors.any())

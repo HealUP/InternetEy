@@ -1,12 +1,12 @@
-package com.dengzh.wyy.model.hosp;
+package com.dengzh.wyy.model.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.dengzh.wyy.model.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.dengzh.wyy.model.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -15,7 +15,7 @@ import lombok.Data;
 
 /**
  * <p>
- * HospitalSet
+ * updateHospitalSet  专门用来传输修改对象信息的 dto
  * </p>
  *
  * @author Dengzh
@@ -23,7 +23,7 @@ import lombok.Data;
 @Data
 @ApiModel(description = "医院设置")
 @TableName("hospital_set")
-public class HospitalSet extends BaseEntity {
+public class updateHospitalSet extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
 
