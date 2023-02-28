@@ -2,6 +2,7 @@ package com.dengzh.wyy.cmn.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dengzh.wyy.model.cmn.Dict;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * Description: 
@@ -10,6 +11,7 @@ import com.dengzh.wyy.model.cmn.Dict;
 * @author: Deng
 * @since JDK 1.8
 */
+@Mapper
 public interface DictMapper extends BaseMapper<Dict> {
 
 }

@@ -1,6 +1,5 @@
 package com.dengzh.wyy.model.cmn;
 
-import com.dengzh.wyy.model.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -21,7 +20,7 @@ import java.util.Map;
 @Data
 @ApiModel(description = "数据字典")
 @TableName("dict")
-public class Dict {
+public class Dict { // 这个不用继承baseEntity
 
     private static final long serialVersionUID = 1L;
 
