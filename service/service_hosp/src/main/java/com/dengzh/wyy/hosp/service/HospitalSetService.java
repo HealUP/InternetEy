@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface HospitalSetService extends IService<HospitalSet> {
 
-//    boolean updateByObj(updateHospitalSet updatehospitalSet);
+     String  getSignKey(String hoscode);
 }

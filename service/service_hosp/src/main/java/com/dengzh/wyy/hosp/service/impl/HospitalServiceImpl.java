@@ -27,7 +27,7 @@ public class HospitalServiceImpl implements HospitalService {
         String mapString = JSONObject.toJSONString(paramMap);
         Hospital hospital = JSONObject.parseObject(mapString, Hospital.class);// 指定要转化为的对象 是Hospital
         // 判断数据库是否存在相同的数据
-        String hoscode = hospital.getHoscode();  // 先查询
+        String hoscode = hospital.getHoscode();  // 先查询mysql数据库
         Hospital hospitalExit = hospitalRepository.getHospitalByHoscode(hoscode);
         // 如果存在，则进行修改
         if (hospitalExit != null) {
