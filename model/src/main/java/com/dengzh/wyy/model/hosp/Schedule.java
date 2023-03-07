@@ -26,7 +26,7 @@ import java.util.Date;
 @Document("Schedule")
 public class Schedule extends BaseMongoEntity {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L; // 序列化 版本
 
 	@ApiModelProperty(value = "医院编号")
 	@Indexed //普通索引

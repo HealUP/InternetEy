@@ -33,20 +33,20 @@ public class DepartmentServiceImpl implements DepartmentService {
         String mapString = JSONObject.toJSONString(paramMap);
         Department department = JSONObject.parseObject(mapString, Department.class); // Hospital.class 指定转化的对象
 
-        //2 判断数据库是否存在相同的数据
-       Department departmentExit =  departmentRepository
+        // 2 判断数据库是否存在相同的数据
+        Department departmentExit = departmentRepository
                 .getDepartmentByHoscodeAndDepcode(department.getHoscode(), department.getDepcode()); // 根据mongodb的命名规范命名 根据科室编号，医院编号查询
-       // 判断是否存在
-       if (departmentExit != null) { // 存在就更新数据 将查询出来的科室的信息的时间、和逻辑删除字段进行更新
-           departmentExit.setUpdateTime(new Date());
-           departmentExit.setIsDeleted(0);
-           departmentRepository.save(departmentExit);
-       } else { // 不存在则将得到的对象存入
-           department.setCreateTime(new Date());
-           department.setUpdateTime(new Date());
-           department.setIsDeleted(0);
-           departmentRepository.save(department);
-       }
+        // 判断是否存在
+        if (departmentExit != null) { // 存在就更新数据 将查询出来的科室的信息的时间、和逻辑删除字段进行更新
+            departmentExit.setUpdateTime(new Date());
+            departmentExit.setIsDeleted(0);
+            departmentRepository.save(departmentExit);
+        } else { // 不存在则将得到的对象存入
+            department.setCreateTime(new Date());
+            department.setUpdateTime(new Date());
+            department.setIsDeleted(0);
+            departmentRepository.save(department);
+        }
     }
 
     // 查询科室数据接口
@@ -57,8 +57,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         PageRequest pageable = PageRequest.of(page - 1, limit);
         // 创建Example对象
         ExampleMatcher matcher = ExampleMatcher.matching()
-                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING) // 进行模糊查询
-                        .withIgnoreCase(true); // 忽略大小写
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING) // 进行模糊查询
+                .withIgnoreCase(true); // 忽略大小写
         // 转换departmentQueryVo对象 为 department对象
         Department department = new Department();
         BeanUtils.copyProperties(departmentQueryVo, department); // 将departmentQueryVo对象 复制给 department
