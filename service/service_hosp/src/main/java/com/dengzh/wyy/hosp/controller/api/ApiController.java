@@ -5,11 +5,16 @@ import com.dengzh.wyy.common.helper.HttpRequestHelper;
 import com.dengzh.wyy.common.result.Result;
 import com.dengzh.wyy.common.result.ResultCodeEnum;
 import com.dengzh.wyy.common.utils.MD5;
+import com.dengzh.wyy.hosp.service.DepartmentService;
 import com.dengzh.wyy.hosp.service.HospitalService;
 import com.dengzh.wyy.hosp.service.HospitalSetService;
+import com.dengzh.wyy.model.hosp.Department;
 import com.dengzh.wyy.model.hosp.Hospital;
+import com.dengzh.wyy.model.vo.hosp.DepartmentQueryVo;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +32,96 @@ public class ApiController {
 
     @Autowired
     private HospitalSetService hospitalSetService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+
+    // 删除科室接口
+    @PostMapping("department/remove")
+    public Result removeDepartment(HttpServletRequest request) {
+        // 获取传递过来的科室信息
+        Map<String, String[]> requestMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(requestMap);
+        // 获取医院编号和科室编号
+        String hoscode = (String) paramMap.get("hoscode");
+        String depcode = (String) paramMap.get("depcode");
+
+        // 签名校验
+        // 获取签名
+        String hospSign = (String) paramMap.get("sign");
+        // 查询数据库中的签名
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        // 签名加密
+        String md5SignKey = MD5.encrypt(signKey);
+        // 签名比对
+        if (!hospSign.equals(md5SignKey)) {
+            throw new wyyException(ResultCodeEnum.SIGN_ERROR); // 签名错误
+        }
+        // 调用service方法
+        departmentService.remove(hoscode, depcode);
+        return Result.ok();
+    }
+
+    // 查询科室信息的接口
+    @PostMapping("department/list")
+    public Result findDepartment(HttpServletRequest request) {
+        // 获取传递过来的科室信息
+        Map<String, String[]> requestMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(requestMap);
+
+        // TODO 封装签名校验
+        // 获取医院编号
+        String hoscode = (String) paramMap.get("hoscode");
+
+        /* 签名校验 */
+        // 获取签名
+        String hospSign = (String) paramMap.get("sign");
+        // 查询数据库中的签名
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        // 签名加密
+        String md5SignKey = MD5.encrypt(signKey);
+        // 签名比对
+        if (!hospSign.equals(md5SignKey)) {
+            throw new wyyException(ResultCodeEnum.SIGN_ERROR); // 签名错误
+        }
+        // 获取当前页page、页面大小limit  如果当前page不存在就赋予默认值的page=1 否则就取出page的值 ~
+        int page = StringUtils.isEmpty(paramMap.get("page")) ? 1 : Integer.parseInt((String) paramMap.get("page"));
+        int limit = StringUtils.isEmpty(paramMap.get("limit")) ? 1 : Integer.parseInt((String) paramMap.get("limit"));
+
+        // 使用查询的vo对象
+        DepartmentQueryVo departmentQueryVo = new DepartmentQueryVo();
+        // 设置医院编号至vo对象
+        departmentQueryVo.setHoscode(hoscode);
+        // 调用service方法
+        Page<Department> modelPage = departmentService.findPageDepartment(page, limit, departmentQueryVo);
+        return Result.ok(modelPage);
+    }
+
+    // 上传科室接口
+    @PostMapping("saveDepartment")
+    public Result saveDepartment(HttpServletRequest request) {
+        // 获取传递过来的科室信息
+        Map<String, String[]> requestMap = request.getParameterMap();
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(requestMap);
+
+        // 获取医院编号
+        String hoscode = (String) paramMap.get("hoscode");
+        // 获取签名
+        String hospSign = (String) paramMap.get("sign");
+        // 查询数据库中的签名
+        String signKey = hospitalSetService.getSignKey(hoscode);
+        // 签名加密
+        String md5SignKey = MD5.encrypt(signKey);
+        // 签名比对
+        if (!hospSign.equals(md5SignKey)) {
+            throw new wyyException(ResultCodeEnum.SIGN_ERROR); // 签名错误
+        }
+
+        // 调用service的方法
+        departmentService.save(paramMap);
+        return Result.ok();
+    }
 
     // 根据医院编号查询医院信息
     @PostMapping("hospital/show")
@@ -60,7 +155,7 @@ public class ApiController {
         // 获取传来的医院信息
         Map<String, String[]> requestMap = request.getParameterMap();
         Map<String, Object> paramMap = HttpRequestHelper.switchMap(requestMap);
-// 签名完善  修改医院系统中的sign的位置，直接进行MD5加密而不使用工具类加密
+        // 签名完善  修改医院系统中的sign的位置，直接进行MD5加密而不使用工具类加密
         // 1.获取医院模拟系统传来的签名 该签名已加密
         String hospSign = (String) paramMap.get("sign");
 

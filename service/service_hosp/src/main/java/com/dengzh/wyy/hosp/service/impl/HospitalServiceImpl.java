@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * 将数据持久化到MongOnDB数据库
+ * 将医院数据持久化到MongOnDB数据库
  */
 @Service
 public class HospitalServiceImpl implements HospitalService {

@@ -1,4 +1,4 @@
-package com.dengzh.wyy.vo.hosp;
+package com.dengzh.wyy.model.vo.hosp;
 
 import com.dengzh.wyy.model.hosp.Department;
 import com.baomidou.mybatisplus.annotation.TableField;

@@ -43,7 +43,7 @@ public class ApiController extends BaseController {
 	@RequestMapping(value="/hospitalSet/save")
 	public String createHospitalSet(ModelMap model,HospitalSet hospitalSet) {
 		hospitalSetMapper.updateById(hospitalSet);
-		return "redirect:/hospitalSet/index"; // 重定向到wyy_hosp下的controller
+		return "redirect:/hospitalSet/index";
 	}
 
 	@RequestMapping("/hospital/index")
