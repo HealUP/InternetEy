@@ -9,6 +9,7 @@ import com.dengzh.wyy.cmn.service.DictService;
 import com.dengzh.wyy.model.cmn.Dict;
 import com.dengzh.wyy.model.vo.cmn.DictEeVo;
 import com.sun.deploy.net.URLEncoder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -29,6 +30,7 @@ import java.util.List;
  * @author: Deng
  * @since JDK 1.8
  */
+@Slf4j
 @Service
 public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
     @Autowired
@@ -62,7 +64,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         try {
             response.setContentType("application/vnd.ms-excel");
             response.setCharacterEncoding("utf-8");
-// 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+            // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
             String fileName = URLEncoder.encode("数据字典", "UTF-8");
             response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
             // 查询数据库
@@ -83,6 +85,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     // 导入数据字典  导入新的数据时，清空缓存
     @CacheEvict(value = "dict", allEntries = true)
+
     @Override
     public void importDictData(MultipartFile file) {
         try {
@@ -94,6 +97,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     // 获取数据字典名称
+//    @Cacheable(value = "dict",keyGenerator = "keyGenerator")
     @Override
     public String getDictName(String dictCode, String value) {
         /* 查询逻辑:
@@ -107,7 +111,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             // 直接根据value查询
             QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("value", value);
-            Dict dict = baseMapper.selectOne(queryWrapper);
+            Dict dict = dictMapper.selectOne(queryWrapper);
             return dict.getName(); // 返回数据字典名字
         } else {// 如果不为空,根据两个字段查询
 //            QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
@@ -115,11 +119,14 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 //            Dict codeDict = baseMapper.selectOne(queryWrapper);
             // 根据dictCode得到dict,再获取其id
             Dict dict = this.getDictByDictCode(dictCode);
-            Long parent_id = dict.getId(); //获取dict 的 parent_id
-            // 根据parent_id 和 value 得到数据字典名字dictName
-            Dict finalDict = baseMapper.selectOne(new QueryWrapper<Dict>()
-                    .eq("parent_id", parent_id)
-                    .eq("value", value));
+            Long id = dict.getId(); //获取dict 的 id
+            log.info("id=================:{}",id);
+            log.info("value============:{}",value);
+            // id 和 value 得到数据字典名字dictName
+            Dict finalDict = dictMapper.selectOne(new QueryWrapper<Dict>()
+                    .eq("parent_id", id) // id作为parent_id
+                    .eq("value", value)); //
+            log.info("finalDict:{}",finalDict.getName());
             return finalDict.getName();
         }
     }
@@ -127,9 +134,9 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     // 根据dictCode获取dict的方法封装
     private Dict getDictByDictCode(String dictCode) {
         QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dictCode", dictCode);
-        Dict codeDict = baseMapper.selectOne(queryWrapper);
-        return codeDict;
+        queryWrapper.eq("dict_code", dictCode); // 条件构造器中的字段要对应具体数据库的字段名称
+        Dict codeDict = dictMapper.selectOne(queryWrapper);
+        return codeDict; // 找到字典对象
     }
 
     // 判断id下面是否包含子节点的方法

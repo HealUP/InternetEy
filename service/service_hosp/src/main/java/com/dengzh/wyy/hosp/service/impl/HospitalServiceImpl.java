@@ -2,6 +2,7 @@ package com.dengzh.wyy.hosp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dengzh.wyy.cmn.client.DictFeignClient;
+import com.dengzh.wyy.enums.DictEnum;
 import com.dengzh.wyy.hosp.repository.HospitalRepository;
 import com.dengzh.wyy.hosp.service.HospitalService;
 import com.dengzh.wyy.model.hosp.Hospital;
@@ -79,13 +80,13 @@ public class HospitalServiceImpl implements HospitalService {
         BeanUtils.copyProperties(hospitalQueryVo, hospital);
         // 创建Example对象
         Example<Hospital> example = Example.of(hospital, matcher);
-        // 调用方法实现查询
+        // 调用方法实现查询医院信息
         Page<Hospital> pages = hospitalRepository.findAll(example, pageable);
 
-        // 查询医院的等级信息 给hospital设置医院等级信息 调用service_cmn微服务模块
-//        List<Hospital> content = all.getContent();
+        // 查询医院的等级信息 给hospital设置医院等级信息 需要调用service_cmn微服务模块
+        // List<Hospital> content = all.getContent();
 
-        // 获取查询list集合 进行医院等级封装(设置到hospital对象中)
+        // 获取查询list集合 进行医院等级封装(设置到hospital对象中) pages里面遍历的是hospital
         pages.getContent().stream().forEach(item -> {
             this.setHospitalHosType(item); // 调用医院等级,省,市,地区封装的方法
         });
@@ -95,10 +96,10 @@ public class HospitalServiceImpl implements HospitalService {
     // 进行医院等级,省,市,地区的封装(设置到hospital对象中)
     private Hospital setHospitalHosType(Hospital hospital) {
         // 远程调用 查询医院等级 mongodb中的hostype对应数据字典的dictCode字段
-        String hostypeString = dictFeignClient.getName("hostype", hospital.getHostype());
+        String hostypeString = dictFeignClient.getName(DictEnum.HOSTYPE.getDictCode(), hospital.getHostype()); // Hostype 作为dictCode值，获取hostype 作为value值（观察mongodb可知）
 
         // 查询省,市 地区 只需要根据value查询即可
-        String provinceString = dictFeignClient.getName(hospital.getProvinceCode());
+        String provinceString = dictFeignClient.getName(hospital.getProvinceCode()); // value
         String cityString = dictFeignClient.getName(hospital.getCityCode());
         String districtString = dictFeignClient.getName(hospital.getDistrictCode());
 

@@ -51,19 +51,19 @@ public class DictController {
     @GetMapping("getName/{dictCode}/{value}")
     public String getName(
             @ApiParam(name = "dictCode", value = "上级编码", required = true)
-            @PathVariable String dictCode,
+            @PathVariable("dictCode") String dictCode,
             @ApiParam(name = "value", value = "值", required = true)
-            @PathVariable String value) {
+            @PathVariable("value") String value) {
         String dictName = dictService.getDictName(dictCode, value);
         return dictName;
     }
 
-    // 根据value查询
+    // 方法重载 根据value查询
     @ApiOperation(value = "获取数据字典名称,根据value查询")
     @GetMapping("getName/{value}")
     public String getName(
             @ApiParam(name = "value", value = "值")
-            @PathVariable String value) {
+            @PathVariable("value") String value) {
         String dictName = dictService.getDictName("",value);
         return  dictName;
     }
