@@ -8,7 +8,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@EnableDiscoveryClient
+@EnableDiscoveryClient // 服务注册
 @ComponentScan(basePackages = "com.dengzh.wyy")
 public class ServiceCmnApplication {
     public static void main(String[] args) {

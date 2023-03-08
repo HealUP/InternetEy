@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.BindingResultUtils;
 import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "医院管理接口")
@@ -35,5 +36,16 @@ public class HospitalController {
         Page<Hospital> pageModel = hospitalService.selectHospPage(page, limit, hospitalQueryVo);
         return Result.ok(pageModel);
     }
+
+    // 更新医院状态
+    @ApiOperation("更新医院状态")
+    @GetMapping("updateHospStatus/{id}/{status}")
+    public Result updateHospStatus(@PathVariable String id, @PathVariable Integer status) {
+        hospitalService.updateStatus(id, status);
+        return Result.ok();
+    }
+
+    // 查看医院详情信息
+
 
 }

@@ -7,6 +7,7 @@ import com.dengzh.wyy.hosp.repository.HospitalRepository;
 import com.dengzh.wyy.hosp.service.HospitalService;
 import com.dengzh.wyy.model.hosp.Hospital;
 import com.dengzh.wyy.model.vo.hosp.HospitalQueryVo;
+import org.apache.catalina.Host;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -83,29 +84,40 @@ public class HospitalServiceImpl implements HospitalService {
         // 调用方法实现查询医院信息
         Page<Hospital> pages = hospitalRepository.findAll(example, pageable);
 
-        // 查询医院的等级信息 给hospital设置医院等级信息 需要调用service_cmn微服务模块
-        // List<Hospital> content = all.getContent();
+        // 进一步，查询医院的等级信息 给hospital设置医院等级信息 需要调用service_cmn微服务模块
 
-        // 获取查询list集合 进行医院等级封装(设置到hospital对象中) pages里面遍历的是hospital
+        // 进行医院等级封装(设置到hospital对象中) pages里面遍历的是hospital
         pages.getContent().stream().forEach(item -> {
             this.setHospitalHosType(item); // 调用医院等级,省,市,地区封装的方法
         });
         return pages;
     }
 
+    // 更新医院状态 mongodb中的更新
+    @Override
+    public void updateStatus(String id, Integer status) {
+        // 根据id查询医院的信息
+        Hospital hospital = hospitalRepository.findById(id).get();
+        // 设置修改的值
+        hospital.setStatus(status);
+        hospital.setUpdateTime(new Date());
+        // 重新添加到mongodb中
+        hospitalRepository.save(hospital);
+    }
+
     // 进行医院等级,省,市,地区的封装(设置到hospital对象中)
     private Hospital setHospitalHosType(Hospital hospital) {
         // 远程调用 查询医院等级 mongodb中的hostype对应数据字典的dictCode字段
-        String hostypeString = dictFeignClient.getName(DictEnum.HOSTYPE.getDictCode(), hospital.getHostype()); // Hostype 作为dictCode值，获取hostype 作为value值（观察mongodb可知）
+        String hostypeString = dictFeignClient.getName(DictEnum.HOSTYPE.getDictCode(), hospital.getHostype()); // Hostype枚举值作为dictCode值，获取hostype 作为value值（观察mongodb可知）
 
-        // 查询省,市 地区 只需要根据value查询即可
+        // 查询省,市 地区，地址 只需要根据value查询即可
         String provinceString = dictFeignClient.getName(hospital.getProvinceCode()); // value
         String cityString = dictFeignClient.getName(hospital.getCityCode());
         String districtString = dictFeignClient.getName(hospital.getDistrictCode());
 
         // 放入到对象中
-        hospital.getParam().put("hostypeString", hostypeString); // 获取到map对象后插入数据
-        hospital.getParam().put("fullAddress", provinceString + cityString + districtString + hospital.getAddress());
+        hospital.getParam().put("hostypeString", hostypeString); // 医院等级信息   获取到map对象后插入数据
+        hospital.getParam().put("fullAddress", provinceString + cityString + districtString + hospital.getAddress()); // 医院的具体地址
         return hospital;
     }
 

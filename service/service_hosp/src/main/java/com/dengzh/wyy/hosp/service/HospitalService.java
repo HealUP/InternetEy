@@ -15,4 +15,7 @@ public interface HospitalService {
 
     // 条件查询带分页 查询医院信息
     Page<Hospital> selectHospPage(Integer page, Integer limit, HospitalQueryVo hospitalQueryVo);
+
+    // 更新医院状态
+    void updateStatus(String id, Integer status);
 }

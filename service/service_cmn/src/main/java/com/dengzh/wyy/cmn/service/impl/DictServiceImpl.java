@@ -36,6 +36,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Autowired
     private DictMapper dictMapper;
 
+    // 根据id获取子节点
     @Cacheable(value = "dict", keyGenerator = "keyGenerator")
     @Override
     public List<Dict> findChildData(Long id) {
@@ -129,6 +130,16 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             log.info("finalDict:{}",finalDict.getName());
             return finalDict.getName();
         }
+    }
+
+    // 根据dictCode获取下级节点 第一次查询所有的省，为了实现省市联动
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+        // 根据dictCode获取id
+        Dict dict = this.getDictByDictCode(dictCode);
+        // 根据id获取子节点
+        List<Dict> list = this.findChildData(dict.getId());
+        return list;
     }
 
     // 根据dictCode获取dict的方法封装

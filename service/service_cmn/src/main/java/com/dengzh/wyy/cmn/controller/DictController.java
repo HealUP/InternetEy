@@ -36,6 +36,17 @@ public class DictController {
         dictService.exportData(response);// 不用返回数据
     }
 
+    // 根据dictCode获取下级节点
+    @ApiOperation(value = "根据dictCode获取下级节点")
+    @GetMapping("findByDictCode/{dictCode}")
+    public Result findByDictCode(
+            @ApiParam(name = "dictCode", value = "dictCode")
+            @PathVariable String dictCode) {
+        List<Dict> list = dictService.findByDictCode(dictCode);
+        return Result.ok(list);
+    }
+
+
     // 根据id查询子数据列表接口
     @ApiOperation(value = "根据id查询子数据列表")
     @GetMapping("findChildData/{id}")
@@ -64,8 +75,8 @@ public class DictController {
     public String getName(
             @ApiParam(name = "value", value = "值")
             @PathVariable("value") String value) {
-        String dictName = dictService.getDictName("",value);
-        return  dictName;
+        String dictName = dictService.getDictName("", value);
+        return dictName;
     }
 
 
