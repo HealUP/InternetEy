@@ -9,8 +9,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.validation.BindingResultUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Api(tags = "医院管理接口")
 @RestController
@@ -31,7 +32,7 @@ public class HospitalController {
             @ApiParam(name = "limit", value = "每页记录数", required = true)
             @PathVariable Integer limit,
             @ApiParam(name = "hospitalQueryVo", value = "查询对象", required = false)
-            HospitalQueryVo hospitalQueryVo
+                    HospitalQueryVo hospitalQueryVo
     ) {
         Page<Hospital> pageModel = hospitalService.selectHospPage(page, limit, hospitalQueryVo);
         return Result.ok(pageModel);
@@ -45,7 +46,14 @@ public class HospitalController {
         return Result.ok();
     }
 
-    // 查看医院详情信息
-
+    // 根据id查找医院，查看医院详情信息
+    @ApiOperation("查看医院详情")
+    @GetMapping("showHospDetail/{id}")
+    public Result showHospDetail(
+            @ApiParam(name = "id", value = "医院id")
+            @PathVariable String id) {
+        Map<String, Object> map = hospitalService.getHospById(id);
+        return Result.ok(map);
+    }
 
 }

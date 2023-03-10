@@ -2,6 +2,7 @@ package com.dengzh.wyy.hosp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dengzh.wyy.cmn.client.DictFeignClient;
+import com.dengzh.wyy.common.result.Result;
 import com.dengzh.wyy.enums.DictEnum;
 import com.dengzh.wyy.hosp.repository.HospitalRepository;
 import com.dengzh.wyy.hosp.service.HospitalService;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import javax.jws.Oneway;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -103,6 +106,28 @@ public class HospitalServiceImpl implements HospitalService {
         hospital.setUpdateTime(new Date());
         // 重新添加到mongodb中
         hospitalRepository.save(hospital);
+    }
+
+    // 根据id查找医院，查看医院详情信息
+    @Override
+    public Map<String, Object> getHospById(String id) {
+        Map<String, Object> map = new HashMap<>();
+        Hospital hospital = hospitalRepository.findById(id).get(); // 根据id找到对象
+        Hospital finalHospital = this.setHospitalHosType(hospital);
+        map.put("hospital", finalHospital);// 包含医院等级，省，市，区地址的医院信息
+        map.put("bookingRule", finalHospital.getBookingRule());// 医院的预约规则，单独返回，方便前端处理
+        finalHospital.setBookingRule(null); // 预约规则 不需要重复返回，将原来的医院的基本信息的该字段设置为空即可
+        return map;
+    }
+
+    // 根据医院编号获取医院名称
+    @Override
+    public String getHospNameByHoscode(String hoscode) {
+        Hospital hospital = hospitalRepository.getHospitalByHoscode(hoscode);// 根据springData规范写
+        if (hospital != null) {
+            return hospital.getHosname(); // 获取名字
+        }
+        return null; // 空的化返回空
     }
 
     // 进行医院等级,省,市,地区的封装(设置到hospital对象中)

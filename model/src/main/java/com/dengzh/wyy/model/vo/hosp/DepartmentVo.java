@@ -18,7 +18,7 @@ public class DepartmentVo {
 	@ApiModelProperty(value = "科室名称")
 	private String depname;
 
-	@ApiModelProperty(value = "下级节点")
+	@ApiModelProperty(value = "下级节点")   // 子科室
 	private List<DepartmentVo> children;
 
 }

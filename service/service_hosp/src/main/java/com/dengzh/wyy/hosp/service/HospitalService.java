@@ -18,4 +18,10 @@ public interface HospitalService {
 
     // 更新医院状态
     void updateStatus(String id, Integer status);
+
+    // 根据id查找医院
+    Map<String, Object> getHospById(String id);
+
+    // 根据医院编号获取医院名称
+    String getHospNameByHoscode(String hoscode);
 }
