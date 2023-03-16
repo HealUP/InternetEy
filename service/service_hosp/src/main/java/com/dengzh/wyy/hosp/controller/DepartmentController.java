@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 @Api(tags = "科室管理接口")
-//@CrossOrigin
+@CrossOrigin
 @RestController
 @RequestMapping("/admin/hosp/department")
 public class DepartmentController {
