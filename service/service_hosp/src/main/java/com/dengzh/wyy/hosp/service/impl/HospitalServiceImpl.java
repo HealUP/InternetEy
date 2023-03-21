@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.jws.Oneway;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -128,6 +129,13 @@ public class HospitalServiceImpl implements HospitalService {
             return hospital.getHosname(); // 获取名字
         }
         return null; // 空的化返回空
+    }
+
+    // 根据医院名称查询医院信息 mongodb的查询方法
+    @Override
+    public List<Hospital> findByHosname(String hosname) {
+        return hospitalRepository.findHospitalByHosnameLike(hosname);
+
     }
 
     // 进行医院等级,省,市,地区的封装(设置到hospital对象中)

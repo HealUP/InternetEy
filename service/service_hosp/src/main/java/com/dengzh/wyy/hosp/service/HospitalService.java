@@ -4,6 +4,7 @@ import com.dengzh.wyy.model.hosp.Hospital;
 import com.dengzh.wyy.model.vo.hosp.HospitalQueryVo;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Map;
 
 public interface HospitalService {
@@ -24,4 +25,7 @@ public interface HospitalService {
 
     // 根据医院编号获取医院名称
     String getHospNameByHoscode(String hoscode);
+
+    // 根据医院名称查询医院信息
+    List<Hospital> findByHosname(String hosname);
 }
