@@ -2,19 +2,20 @@ package com.dengzh.wyy.hosp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dengzh.wyy.cmn.client.DictFeignClient;
-import com.dengzh.wyy.common.result.Result;
 import com.dengzh.wyy.enums.DictEnum;
 import com.dengzh.wyy.hosp.repository.HospitalRepository;
 import com.dengzh.wyy.hosp.service.HospitalService;
 import com.dengzh.wyy.model.hosp.Hospital;
 import com.dengzh.wyy.model.vo.hosp.HospitalQueryVo;
-import org.apache.catalina.Host;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.jws.Oneway;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;

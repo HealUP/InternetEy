@@ -33,3 +33,9 @@ build/
 .vscode/
 ### application.properties ###
 application.properties
+/hospital_manage/src/main/resources/
+/service/service_cmn/src/main/resources/
+/service/service_hosp/src/main/resources/
+/service/service_user/src/main/resources/
+/service_client/service-cmn-client/src/main/resources/
+/service_gateway/src/main/resources/

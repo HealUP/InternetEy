@@ -51,8 +51,10 @@ public class HospApiController {
             @ApiParam(value = "hosname", name = "医院名称", required = true)
             @PathVariable String hosname
     ) {
+
         List<Hospital> list = hospitalService.findByHosname(hosname);
         return Result.ok(list);
+
     }
 
 }

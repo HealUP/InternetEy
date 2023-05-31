@@ -2,6 +2,7 @@ package com.dengzh.wyy.hosp.controller;
 
 import com.dengzh.wyy.common.result.Result;
 import com.dengzh.wyy.hosp.service.DepartmentService;
+import com.dengzh.wyy.model.hosp.Department;
 import com.dengzh.wyy.model.vo.hosp.DepartmentVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
